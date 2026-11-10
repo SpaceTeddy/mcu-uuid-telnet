@@ -152,7 +152,11 @@ void TelnetService::loop() {
 		}
 	}
 
+#if defined(ESP_ARDUINO_VERSION_MAJOR) && ESP_ARDUINO_VERSION_MAJOR >= 3
+	WiFiClient client = server_.accept();   // available() is deprecated in core 3.x
+#else
 	WiFiClient client = server_.available();
+#endif
 	if (client) {
 		if (connections_.size() >= maximum_connections_) {
 #if UUID_TELNET_HAVE_WIFICLIENT_REMOTE
